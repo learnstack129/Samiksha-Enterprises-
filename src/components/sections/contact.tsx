@@ -3,14 +3,12 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { useState, useTransition, useRef, useEffect } from 'react';
-import { getServiceSuggestions } from '@/ai/flows/contact-form-suggestions';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { Loader2, Mail, MapPin, User } from 'lucide-react';
+import { Mail, MapPin, User } from 'lucide-react';
 import { AnimateOnScroll } from '../motion/AnimateOnScroll';
 import { useToast } from '@/hooks/use-toast';
 
@@ -26,46 +24,10 @@ type ContactFormValues = z.infer<typeof contactFormSchema>;
 
 export default function Contact() {
   const { toast } = useToast();
-  const [suggestions, setSuggestions] = useState<string[]>([]);
-  const [showSuggestions, setShowSuggestions] = useState(false);
-  const [isPending, startTransition] = useTransition();
   const form = useForm<ContactFormValues>({
     resolver: zodResolver(contactFormSchema),
     defaultValues: { name: '', company: '', service: '', phone: '', message: '' },
   });
-
-  const suggestionsRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (suggestionsRef.current && !suggestionsRef.current.contains(event.target as Node)) {
-        setShowSuggestions(false);
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
-
-  const handleServiceInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    form.setValue('service', value);
-    if (value.length > 2) {
-      setShowSuggestions(true);
-      startTransition(async () => {
-        const result = await getServiceSuggestions({ userInput: value });
-        setSuggestions(result.suggestions);
-      });
-    } else {
-      setSuggestions([]);
-      setShowSuggestions(false);
-    }
-  };
-
-  const handleSuggestionClick = (suggestion: string) => {
-    form.setValue('service', suggestion);
-    setSuggestions([]);
-    setShowSuggestions(false);
-  };
 
   const onSubmit = (data: ContactFormValues) => {
     console.log(data); // Placeholder for form submission logic
@@ -148,49 +110,22 @@ export default function Contact() {
                         )}
                       />
                     </div>
-                    <div className="relative" ref={suggestionsRef}>
-                      <FormField
-                        control={form.control}
-                        name="service"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Service Required</FormLabel>
-                            <FormControl>
-                              <Input
-                                placeholder="e.g., Fabrication, POP..."
-                                {...field}
-                                onChange={handleServiceInputChange}
-                                onFocus={() => value.length > 2 && setShowSuggestions(true)}
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      {showSuggestions && (isPending || suggestions.length > 0) && (
-                        <Card className="absolute z-10 w-full mt-1 shadow-lg">
-                          <CardContent className="p-2">
-                            {isPending ? (
-                              <div className="flex items-center justify-center p-2">
-                                <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
-                              </div>
-                            ) : (
-                              <ul className="space-y-1">
-                                {suggestions.map((suggestion) => (
-                                  <li
-                                    key={suggestion}
-                                    className="px-3 py-2 rounded-md hover:bg-muted cursor-pointer text-sm"
-                                    onClick={() => handleSuggestionClick(suggestion)}
-                                  >
-                                    {suggestion}
-                                  </li>
-                                ))}
-                              </ul>
-                            )}
-                          </CardContent>
-                        </Card>
+                    <FormField
+                      control={form.control}
+                      name="service"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Service Required</FormLabel>
+                          <FormControl>
+                            <Input
+                              placeholder="e.g., Fabrication, POP..."
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
                       )}
-                    </div>
+                    />
                     <FormField
                       control={form.control}
                       name="phone"
