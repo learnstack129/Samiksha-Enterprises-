@@ -1,3 +1,88 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "hero-1",
+      "description": "A wide shot of an industrial construction site at dusk.",
+      "imageUrl": "https://images.unsplash.com/photo-1527335988388-b40ee248d80c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxpbmR1c3RyaWFsJTIwY29uc3RydWN0aW9ufGVufDB8fHx8MTc2NTg3OTMxNHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "industrial construction"
+    },
+    {
+      "id": "about-1",
+      "description": "Portrait of a confident construction manager.",
+      "imageUrl": "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxjb25zdHJ1Y3Rpb24lMjBtYW5hZ2VyfGVufDB8fHx8MTc2NTgxMDQ5Nnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "construction manager"
+    },
+    {
+      "id": "gallery-1",
+      "description": "Interior of a building with freshly painted walls and POP work.",
+      "imageUrl": "https://images.unsplash.com/photo-1600054648630-e10e710825f6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxpbnRlcmlvciUyMHBhaW50aW5nfGVufDB8fHx8MTc2NTg3OTMxNHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "interior painting"
+    },
+    {
+      "id": "gallery-2",
+      "description": "Close-up of industrial shed roofing installation.",
+      "imageUrl": "https://images.unsplash.com/photo-1635424824800-692767998d07?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8cm9vZmluZyUyMGluc3RhbGxhdGlvbnxlbnwwfHx8fDE3NjU4NDUyMjJ8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "roofing installation"
+    },
+    {
+      "id": "gallery-3",
+      "description": "Heavy structural fabrication in progress at a workshop.",
+      "imageUrl": "https://images.unsplash.com/photo-1718963581743-10d76f92d42f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxzdHJ1Y3R1cmFsJTIwZmFicmljYXRpb258ZW58MHx8fHwxNzY1ODc5MzE0fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "structural fabrication"
+    },
+    {
+      "id": "gallery-4",
+      "description": "Modern office space with sleek aluminium and glass partitions.",
+      "imageUrl": "https://images.unsplash.com/photo-1742094561255-18506fba7a48?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxvZmZpY2UlMjBwYXJ0aXRpb25zfGVufDB8fHx8MTc2NTg3OTMxNHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "office partitions"
+    },
+    {
+      "id": "gallery-5",
+      "description": "A newly installed industrial gate.",
+      "imageUrl": "https://images.unsplash.com/photo-1759310347467-578dfd846229?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxpbmR1c3RyaWFsJTIwZ2F0ZXxlbnwwfHx8fDE3NjU4NzkzMTR8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "industrial gate"
+    },
+    {
+      "id": "gallery-6",
+      "description": "Plumber working on commercial waterproofing.",
+      "imageUrl": "https://images.unsplash.com/photo-1704049419874-f5f9e55b42ff?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxjb21tZXJjaWFsJTIwd2F0ZXJwcm9vZmluZ3xlbnwwfHx8fDE3NjU4NzkzMTR8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "commercial waterproofing"
+    },
+    {
+      "id": "gallery-7",
+      "description": "Stacks of industrial materials ready for supply.",
+      "imageUrl": "https://images.unsplash.com/photo-1763926025477-423847028860?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxpbmR1c3RyaWFsJTIwbWF0ZXJpYWxzfGVufDB8fHx8MTc2NTg3ODIxMHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "industrial materials"
+    },
+    {
+      "id": "gallery-8",
+      "description": "A beautiful residential building with exterior paint work.",
+      "imageUrl": "https://images.unsplash.com/photo-1574359411659-15573a27fd0c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxleHRlcmlvciUyMHBhaW50aW5nfGVufDB8fHx8MTc2NTg3OTMxNHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "exterior painting"
+    },
+    {
+      "id": "gallery-9",
+      "description": "Detailed view of ornate grillwork.",
+      "imageUrl": "https://images.unsplash.com/photo-1759636707272-d993da228fdc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxvcm5hdGUlMjBncmlsbHdvcmt8ZW58MHx8fHwxNzY1ODc5MzE0fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "ornate grillwork"
+    },
+    {
+      "id": "gallery-10",
+      "description": "Polished flooring in a large commercial hall.",
+      "imageUrl": "https://images.unsplash.com/photo-1552442409-91f9cbeb8791?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxwb2xpc2hlZCUyMGZsb29yaW5nfGVufDB8fHx8MTc2NTg3OTMxNHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "polished flooring"
+    },
+    {
+      "id": "gallery-11",
+      "description": "Corporate printing materials, like brochures and banners.",
+      "imageUrl": "https://images.unsplash.com/photo-1617380607001-2797ed957a6f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxjb3Jwb3JhdGUlMjBwcmludGluZ3xlbnwwfHx8fDE3NjU4NzkzMTR8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "corporate printing"
+    },
+    {
+      "id": "gallery-12",
+      "description": "A complex plumbing system installation.",
+      "imageUrl": "https://images.unsplash.com/photo-1577522892450-868e30731cee?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8cGx1bWJpbmclMjBzeXN0ZW18ZW58MHx8fHwxNzY1ODc4MjEwfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "plumbing system"
+    }
+  ]
 }
