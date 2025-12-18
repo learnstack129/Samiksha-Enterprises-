@@ -5,7 +5,7 @@ import Hero from '@/components/sections/hero';
 import About from '@/components/sections/about';
 import Services from '@/components/sections/services';
 import Gallery from '@/components/sections/gallery';
-import VendorStatus from '@/components/sections/vendor-status';
+
 import Contact from '@/components/sections/contact';
 import Footer from '@/components/site/footer';
 import Testimonials from '@/components/sections/testimonials';
@@ -46,7 +46,6 @@ export default async function Home() {
         {/* Pass the found images to the Gallery component */}
         <Gallery folderImages={galleryImages} />
         <Testimonials />
-        <VendorStatus />
         <Contact />
       </main>
       <Footer />
