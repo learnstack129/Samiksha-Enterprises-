@@ -72,11 +72,13 @@ export default function VendorStatus() {
                   value={code}
                   onChange={(e) => setCode(e.target.value)}
                   disabled={loading}
+                  suppressHydrationWarning
                 />
                 <Button
                   type="submit"
                   className="bg-accent text-accent-foreground hover:bg-accent/90"
                   disabled={loading}
+                  suppressHydrationWarning
                 >
                   {loading ? 'Verifying...' : 'Verify Status'}
                 </Button>

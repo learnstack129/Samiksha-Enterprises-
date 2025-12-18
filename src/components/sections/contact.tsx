@@ -90,7 +90,11 @@ export default function Contact() {
                           <FormItem>
                             <FormLabel>Full Name</FormLabel>
                             <FormControl>
-                              <Input placeholder="John Doe" {...field} />
+                              <Input 
+                                placeholder="John Doe" 
+                                {...field} 
+                                suppressHydrationWarning 
+                              />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -103,7 +107,11 @@ export default function Contact() {
                           <FormItem>
                             <FormLabel>Company (Optional)</FormLabel>
                             <FormControl>
-                              <Input placeholder="Your Company Inc." {...field} />
+                              <Input 
+                                placeholder="Your Company Inc." 
+                                {...field} 
+                                suppressHydrationWarning 
+                              />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -120,6 +128,7 @@ export default function Contact() {
                             <Input
                               placeholder="e.g., Fabrication, POP..."
                               {...field}
+                              suppressHydrationWarning
                             />
                           </FormControl>
                           <FormMessage />
@@ -133,7 +142,11 @@ export default function Contact() {
                         <FormItem>
                           <FormLabel>Phone Number</FormLabel>
                           <FormControl>
-                            <Input placeholder="+91 12345 67890" {...field} />
+                            <Input 
+                              placeholder="+91 12345 67890" 
+                              {...field} 
+                              suppressHydrationWarning 
+                            />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -146,13 +159,22 @@ export default function Contact() {
                         <FormItem>
                           <FormLabel>Message (Optional)</FormLabel>
                           <FormControl>
-                            <Textarea placeholder="Additional details about your project..." {...field} />
+                            <Textarea 
+                              placeholder="Additional details about your project..." 
+                              {...field} 
+                              suppressHydrationWarning 
+                            />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
                       )}
                     />
-                    <Button type="submit" size="lg" className="w-full bg-accent text-accent-foreground hover:bg-accent/90">
+                    <Button 
+                      type="submit" 
+                      size="lg" 
+                      className="w-full bg-accent text-accent-foreground hover:bg-accent/90"
+                      suppressHydrationWarning
+                    >
                       Submit Inquiry
                     </Button>
                   </form>

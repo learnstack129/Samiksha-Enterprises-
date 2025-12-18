@@ -1,5 +1,4 @@
 import Image from 'next/image';
-import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { Card } from '@/components/ui/card';
 import { AnimateOnScroll } from '@/components/motion/AnimateOnScroll';
 
@@ -10,23 +9,20 @@ const stats = [
 ];
 
 export default function About() {
-  const aboutImage = PlaceHolderImages.find((img) => img.id === 'about-1');
-
   return (
     <section id="about" className="py-20 lg:py-32 bg-card">
       <div className="container mx-auto px-4">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
           <AnimateOnScroll animation="slide-in-left" className="w-full max-w-md mx-auto">
-            {aboutImage && (
+            <div className="relative aspect-square w-full">
               <Image
-                src={aboutImage.imageUrl}
-                alt={aboutImage.description}
-                data-ai-hint={aboutImage.imageHint}
-                width={800}
-                height={800}
-                className="rounded-lg shadow-2xl object-cover aspect-square"
+                src="/images/gallery/team.jpg" // <--- FIXED PATH
+                alt="Mr. Satish Jagadale and Team - Samiksha Enterprises"
+                fill
+                className="rounded-lg shadow-2xl object-cover"
+                sizes="(max-width: 768px) 100vw, 50vw"
               />
-            )}
+            </div>
           </AnimateOnScroll>
           <div className="flex flex-col gap-8">
             <AnimateOnScroll animation="slide-in-right">
