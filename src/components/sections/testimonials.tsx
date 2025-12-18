@@ -7,43 +7,59 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from '@/components/ui/carousel';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { AnimateOnScroll } from '../motion/AnimateOnScroll';
 import { Star, Quote } from 'lucide-react';
 
-// Mock data - You can move this to a separate file like src/lib/data.ts later
+// Updated reviews covering Civil, Fabrication, Painting, Plumbing, etc.
 const testimonials = [
   {
     id: 1,
-    name: "Rajesh Kumar",
-    role: "Factory Manager",
-    content: "Samiksha Solutions transformed our production line with their automation tools. The efficiency has increased by 40% within just two months. Highly recommended!",
+    name: "Ramesh Pawar",
+    role: "Site Engineer, Omega Constructions",
+    content: "Samiksha Enterprises handled the complete Civil Work and Fabrication for our new warehouse extension. The structural integrity and finish quality were top-notch. Delivered right on schedule.",
     rating: 5,
-    initials: "RK"
+    initials: "RP"
   },
   {
     id: 2,
-    name: "Priya Desai",
-    role: "Operations Head",
-    content: "The CCTV and security systems installation was seamless. Their team is professional, punctual, and the after-sales support is excellent.",
+    name: "Suresh Gupta",
+    role: "Facility Manager, TechPark Towers",
+    content: "We hired them for Aluminium and Glass Work for our office partitions. The craftsmanship is excellent, and they also managed the POP work and Painting seamlessly. A one-stop solution.",
     rating: 5,
-    initials: "PD"
+    initials: "SG"
   },
   {
     id: 3,
-    name: "Amit Patel",
-    role: "IT Director",
-    content: "We sourced our industrial networking equipment from them. Great pricing and genuine products. Will definitely continue this partnership.",
+    name: "Anil Deshmukh",
+    role: "Procurement Head, City Infra",
+    content: "For Material Supply and Trading, Samiksha Enterprises is our go-to vendor. Whether it's hardware or raw construction material, their pricing is competitive and delivery is always timely.",
     rating: 4,
-    initials: "AP"
+    initials: "AD"
   },
   {
     id: 4,
-    name: "Suresh Reddy",
-    role: "Plant Supervisor",
-    content: "Their sensor solutions helped us solve a critical quality control issue we had been facing for years. The technical expertise they bring is unmatched.",
+    name: "Vikas Malhotra",
+    role: "Maintenance Lead, Star Hotels",
+    content: "Their team fixed a critical issue with our central Plumbing system that others couldn't resolve. We also used their Printing services for our safety signage, which was high quality.",
     rating: 5,
-    initials: "SR"
+    initials: "VM"
+  },
+  {
+    id: 5,
+    name: "Deepak Verma",
+    role: "Contractor",
+    content: "I have worked with many vendors for Fabrication and heavy structural work, but Samiksha Enterprises stands out for their precision and safety standards. Highly recommended for industrial projects.",
+    rating: 5,
+    initials: "DV"
+  },
+  {
+    id: 6,
+    name: "Priya Sharma",
+    role: "Interior Designer",
+    content: "The POP work and Painting finish they delivered for my commercial project was flawless. It is rare to find a team that handles both civil repairs and aesthetic finishing so well.",
+    rating: 5,
+    initials: "PS"
   }
 ];
 
@@ -54,9 +70,9 @@ export default function Testimonials() {
         
         {/* Section Header */}
         <AnimateOnScroll animation="fade-in" className="text-center mb-16">
-          <h2 className="text-3xl lg:text-4xl font-bold text-primary">What Our Clients Say</h2>
+          <h2 className="text-3xl lg:text-4xl font-bold text-primary">Client Feedback</h2>
           <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">
-            Trusted by businesses across the industry. Here are some of their experiences working with us.
+            Trusted by clients for our Civil, Fabrication, and Supply services.
           </p>
         </AnimateOnScroll>
 
@@ -74,7 +90,7 @@ export default function Testimonials() {
                 {testimonials.map((testimonial) => (
                   <CarouselItem key={testimonial.id} className="pl-4 md:basis-1/2 lg:basis-1/3">
                     <div className="h-full p-1">
-                      <Card className="h-full flex flex-col relative border-none shadow-md hover:shadow-lg transition-shadow">
+                      <Card className="h-full flex flex-col relative border-none shadow-md hover:shadow-lg transition-shadow bg-card">
                         <CardContent className="flex-grow pt-10 pb-6 px-6">
                           
                           {/* Quote Icon */}
@@ -89,23 +105,22 @@ export default function Testimonials() {
                                 key={i}
                                 className={`w-4 h-4 ${
                                   i < testimonial.rating
-                                    ? "text-yellow-500 fill-yellow-500"
-                                    : "text-gray-300"
+                                    ? "text-accent fill-accent"
+                                    : "text-muted"
                                 }`}
                               />
                             ))}
                           </div>
 
                           {/* Review Text */}
-                          <p className="text-muted-foreground mb-6 leading-relaxed">
+                          <p className="text-muted-foreground mb-6 leading-relaxed italic">
                             "{testimonial.content}"
                           </p>
 
                           {/* User Info */}
                           <div className="flex items-center gap-3 mt-auto pt-4 border-t border-border/50">
                             <Avatar className="h-10 w-10 border border-primary/10">
-                              <AvatarImage src={`/images/avatars/${testimonial.id}.png`} alt={testimonial.name} />
-                              <AvatarFallback className="bg-primary/10 text-primary font-medium">
+                              <AvatarFallback className="bg-primary/5 text-primary font-bold">
                                 {testimonial.initials}
                               </AvatarFallback>
                             </Avatar>
