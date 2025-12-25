@@ -3,8 +3,8 @@ import { Card } from '@/components/ui/card';
 import { AnimateOnScroll } from '@/components/motion/AnimateOnScroll';
 
 const stats = [
-  { value: '10+', label: 'Years Experience' },
-  { value: '50+', label: 'Corporate Projects' },
+  { value: '15+', label: 'Years Experience' },
+  { value: '10+', label: 'Corporate Projects' },
   { value: 'GST', label: 'Registered' },
 ];
 
