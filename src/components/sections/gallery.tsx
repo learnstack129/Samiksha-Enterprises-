@@ -30,11 +30,18 @@ interface GalleryProps {
 export default function Gallery({ folderImages = [] }: GalleryProps) {
   // Convert the file paths (strings) into the object format our gallery needs
   const imagesToDisplay: GalleryImage[] = folderImages.length > 0
-    ? folderImages.map((path, index) => ({
-        id: `local-image-${index}`,
-        imageUrl: path,
-        description: `Project Photo ${index + 1}`
-      }))
+    ? folderImages.map((path, index) => {
+        // Extract filename from path (e.g., "/images/work/Modern Kitchen.jpg" -> "Modern Kitchen")
+        const fileName = path.split('/').pop()?.split('.')[0] || `Project ${index + 1}`;
+        // Decode URI components to handle spaces (e.g., "Modern%20Kitchen" -> "Modern Kitchen")
+        const cleanName = decodeURIComponent(fileName);
+
+        return {
+          id: `local-image-${index}`,
+          imageUrl: path,
+          description: cleanName // Use the filename as the description
+        };
+      })
     : [];
 
   const [lightboxOpen, setLightboxOpen] = useState(false);
@@ -78,9 +85,9 @@ export default function Gallery({ folderImages = [] }: GalleryProps) {
                     <CarouselContent className="-ml-4">
                       {imagesToDisplay.map((image) => (
                         <CarouselItem key={image.id} className="pl-4 md:basis-1/2 lg:basis-1/3 xl:basis-1/4">
-                          <div className="p-1">
+                          <div className="p-1 h-full">
                             <Card 
-                                className="overflow-hidden border-none shadow-md hover:shadow-xl transition-all duration-300 cursor-pointer group"
+                                className="overflow-hidden border-none shadow-md hover:shadow-xl transition-all duration-300 cursor-pointer group h-full flex flex-col"
                                 onClick={() => openLightbox(image)}
                             >
                               <CardContent className="p-0 relative aspect-[4/3]">
@@ -96,6 +103,15 @@ export default function Gallery({ folderImages = [] }: GalleryProps) {
                                   <p className="text-white font-medium tracking-wide">View Project</p>
                                 </div>
                               </CardContent>
+                              
+                              {/* --- NEW SECTION: Display Image Name --- */}
+                              <div className="p-3 text-center bg-card border-t">
+                                <p className="font-semibold text-sm truncate" title={image.description}>
+                                  {image.description}
+                                </p>
+                              </div>
+                              {/* --------------------------------------- */}
+
                             </Card>
                           </div>
                         </CarouselItem>
@@ -130,7 +146,7 @@ export default function Gallery({ folderImages = [] }: GalleryProps) {
           </DialogDescription>
 
           {selectedImage && (
-            <div className="relative w-full h-[80vh] flex items-center justify-center pointer-events-none">
+            <div className="relative w-full h-[80vh] flex flex-col items-center justify-center pointer-events-none">
                 {/* Image Wrapper to allow interaction */}
                 <div className="relative w-full h-full pointer-events-auto">
                     <Image
@@ -139,6 +155,10 @@ export default function Gallery({ folderImages = [] }: GalleryProps) {
                     fill
                     className="object-contain"
                     />
+                </div>
+                {/* Optional: Show name in lightbox too */}
+                <div className="mt-4 bg-black/50 px-4 py-2 rounded text-white pointer-events-auto">
+                    {selectedImage.description}
                 </div>
             </div>
           )}
