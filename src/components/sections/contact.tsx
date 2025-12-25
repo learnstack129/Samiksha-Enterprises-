@@ -53,7 +53,7 @@ export default function Contact() {
               <MapPin className="h-8 w-8 text-primary mt-1" />
               <div>
                 <h3 className="text-xl font-semibold">Address</h3>
-                <p className="text-muted-foreground">Pune, Maharashtra</p>
+                <p className="text-muted-foreground">Sr.No.15/2/1/4, A - 204, Venkatesh classic, Near JSPM College, Handewadi Road, Pune - 411028</p>
               </div>
             </div>
             <div className="flex items-start gap-4">
@@ -67,7 +67,7 @@ export default function Contact() {
               <Mail className="h-8 w-8 text-primary mt-1" />
               <div>
                 <h3 className="text-xl font-semibold">Email</h3>
-                <p className="text-muted-foreground">contact@samiksha.com (example)</p>
+                <p className="text-muted-foreground">satishj429@gmail.com</p>
               </div>
             </div>
             <div className="mt-8 rounded-lg bg-muted h-64 flex items-center justify-center">
