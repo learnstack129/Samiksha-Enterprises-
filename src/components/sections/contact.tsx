@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -8,9 +9,10 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { Mail, MapPin, User } from 'lucide-react';
+import { Mail, MapPin, User, Loader2 } from 'lucide-react';
 import { AnimateOnScroll } from '../motion/AnimateOnScroll';
 import { useToast } from '@/hooks/use-toast';
+import { sendContactEmail } from '@/app/actions/contact'; // Make sure to create this file (step 2 below)
 
 const contactFormSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters.'),
@@ -24,18 +26,40 @@ type ContactFormValues = z.infer<typeof contactFormSchema>;
 
 export default function Contact() {
   const { toast } = useToast();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const form = useForm<ContactFormValues>({
     resolver: zodResolver(contactFormSchema),
     defaultValues: { name: '', company: '', service: '', phone: '', message: '' },
   });
 
-  const onSubmit = (data: ContactFormValues) => {
-    console.log(data); // Placeholder for form submission logic
-    toast({
-      title: 'Message Sent!',
-      description: 'Thank you for your inquiry. We will get back to you shortly.',
-    });
-    form.reset();
+  const onSubmit = async (data: ContactFormValues) => {
+    setIsSubmitting(true);
+    try {
+      const result = await sendContactEmail(data);
+
+      if (result.success) {
+        toast({
+          title: 'Message Sent!',
+          description: 'Thank you for your inquiry. We will get back to you shortly.',
+        });
+        form.reset();
+      } else {
+        toast({
+          variant: "destructive",
+          title: 'Error',
+          description: 'Something went wrong. Please try again or call us directly.',
+        });
+      }
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: 'Connection Error',
+        description: 'Failed to send message. Please check your internet.',
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -53,7 +77,11 @@ export default function Contact() {
               <MapPin className="h-8 w-8 text-primary mt-1" />
               <div>
                 <h3 className="text-xl font-semibold">Address</h3>
-                <p className="text-muted-foreground">Sr.No.15/2/1/4, A - 204, Venkatesh classic, Near JSPM College, Handewadi Road, Pune - 411028</p>
+                <p className="text-muted-foreground">
+                  Sr.No.15/2/1/4, A - 204, Venkatesh Classic,<br />
+                  Near JSPM College, Handewadi Road,<br />
+                  Pune - 411028
+                </p>
               </div>
             </div>
             <div className="flex items-start gap-4">
@@ -71,17 +99,17 @@ export default function Contact() {
               </div>
             </div>
             <div className="mt-8 rounded-lg bg-muted h-64 w-full overflow-hidden border">
-  <iframe
-    src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3784.5303037092363!2d73.93305077519015!3d18.459623282622204!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMTjCsDI3JzM0LjYiTiA3M8KwNTYnMDguMyJF!5e0!3m2!1sen!2sin!4v1766649159936!5m2!1sen!2sin" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
-    width="100%"
-    height="100%"
-    style={{ border: 0 }}
-    allowFullScreen
-    loading="lazy"
-    referrerPolicy="no-referrer-when-downgrade"
-    title="Office Location"
-  />
-</div>
+              <iframe
+                src="https://maps.google.com/maps?q=18.459379,73.93576&z=15&output=embed"
+                width="100%"
+                height="100%"
+                style={{ border: 0 }}
+                allowFullScreen
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                title="Office Location"
+              />
+            </div>
           </AnimateOnScroll>
           <AnimateOnScroll animation="slide-in-right" className="lg:col-span-3">
             <Card className="shadow-2xl">
@@ -182,9 +210,17 @@ export default function Contact() {
                       type="submit" 
                       size="lg" 
                       className="w-full bg-accent text-accent-foreground hover:bg-accent/90"
+                      disabled={isSubmitting}
                       suppressHydrationWarning
                     >
-                      Submit Inquiry
+                      {isSubmitting ? (
+                        <>
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                          Sending...
+                        </>
+                      ) : (
+                        'Submit Inquiry'
+                      )}
                     </Button>
                   </form>
                 </Form>
