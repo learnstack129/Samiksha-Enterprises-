@@ -1,14 +1,14 @@
-// src/components/sections/clients.tsx
+"use client"; // <--- THIS IS REQUIRED FOR onError TO WORK
+
+import { useState } from 'react';
 import Image from 'next/image';
 import { AnimateOnScroll } from '../motion/AnimateOnScroll';
 
-// We use Clearbit's Logo API where possible for official logos.
-// For local Pune businesses without a global domain, we use a placeholder or specific URL.
 const clients = [
   // Honeywell Group
   { name: 'Honeywell Automation', domain: 'honeywell.com' },
-  { name: 'Honeywell Universal Mfg', domain: 'honeywell.com' }, // Same logo
-  { name: 'Honeywell International', domain: 'honeywell.com' }, // Same logo
+  { name: 'Honeywell Universal Mfg', domain: 'honeywell.com' },
+  { name: 'Honeywell International', domain: 'honeywell.com' },
   
   // Major MNCs
   { name: 'Fuji Electric', domain: 'fujielectric.com' },
@@ -21,15 +21,47 @@ const clients = [
   // Industrial & Technical
   { name: 'Bombay Fluid Systems (Swagelok)', domain: 'swagelok.com' },
   { name: 'Baker Gauges India', domain: 'bakergauges.com' },
-  { name: 'Eclipse Combustion', domain: 'honeywell.com' }, // Acquired by Honeywell
+  { name: 'Eclipse Combustion', domain: 'honeywell.com' },
   { name: 'Amperehour Solar', domain: 'amperehourenergy.com' },
   { name: 'SBEM Pvt Ltd', domain: 'sbem.in' },
   
-  // Local Pune Brands (Logos might need manual upload if not found, using high-quality placeholders)
+  // Local Pune Brands
   { name: 'Chitale Bandhu Mithaiwale', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Chitale_Bandhu_Mithaiwale_logo.svg/512px-Chitale_Bandhu_Mithaiwale_logo.svg.png' },
   { name: 'Venus Traders', fallback: 'VT' },
   { name: 'Jay Engineering', fallback: 'JE' },
 ];
+
+// Sub-component to handle individual logo errors safely
+const ClientLogo = ({ client }: { client: typeof clients[0] }) => {
+  const [hasError, setHasError] = useState(false);
+
+  // Construct Logo URL
+  const logoUrl = client.logo 
+    ? client.logo 
+    : client.domain 
+      ? `https://logo.clearbit.com/${client.domain}?size=200` 
+      : `https://placehold.co/200x80/f3f4f6/1f2937?text=${client.fallback || client.name}`;
+
+  if (hasError) {
+    // Fallback text if logo fails
+    return (
+      <span className="text-xs font-bold text-muted-foreground text-center px-2">
+        {client.name}
+      </span>
+    );
+  }
+
+  return (
+    <Image
+      src={logoUrl}
+      alt={`${client.name} Logo`}
+      width={160}
+      height={60}
+      className="object-contain max-h-full max-w-full"
+      onError={() => setHasError(true)}
+    />
+  );
+};
 
 export default function Clients() {
   return (
@@ -44,41 +76,17 @@ export default function Clients() {
 
         <AnimateOnScroll animation="slide-in-up" delay="100ms">
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 items-center justify-items-center">
-            {clients.map((client, index) => {
-              // Construct Logo URL
-              const logoUrl = client.logo 
-                ? client.logo 
-                : client.domain 
-                  ? `https://logo.clearbit.com/${client.domain}?size=200` 
-                  : `https://placehold.co/200x80/f3f4f6/1f2937?text=${client.fallback || client.name}`;
-
-              return (
-                <div 
-                  key={index} 
-                  className="w-full h-32 flex flex-col items-center justify-center p-6 bg-white border border-border/50 rounded-xl shadow-sm hover:shadow-md hover:border-primary/20 transition-all duration-300 group"
-                  title={client.name}
-                >
-                  <div className="relative w-full h-16 flex items-center justify-center grayscale group-hover:grayscale-0 transition-all duration-500 opacity-80 group-hover:opacity-100">
-                    <Image
-                      src={logoUrl}
-                      alt={`${client.name} Logo`}
-                      width={160}
-                      height={60}
-                      className="object-contain max-h-full max-w-full"
-                      onError={(e) => {
-                        // Fallback if logo fails to load
-                        e.currentTarget.style.display = 'none';
-                        e.currentTarget.parentElement.innerHTML = `<span class="text-xs font-bold text-muted-foreground text-center">${client.name}</span>`;
-                      }}
-                    />
-                  </div>
-                  {/* Optional: Show name on hover for clarity */}
-                  <span className="mt-3 text-[10px] font-medium text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity absolute bottom-2">
-                    {client.name}
-                  </span>
+            {clients.map((client, index) => (
+              <div 
+                key={index} 
+                className="w-full h-32 flex flex-col items-center justify-center p-6 bg-white border border-border/50 rounded-xl shadow-sm hover:shadow-md hover:border-primary/20 transition-all duration-300 group"
+                title={client.name}
+              >
+                <div className="relative w-full h-16 flex items-center justify-center grayscale group-hover:grayscale-0 transition-all duration-500 opacity-80 group-hover:opacity-100">
+                  <ClientLogo client={client} />
                 </div>
-              );
-            })}
+              </div>
+            ))}
           </div>
         </AnimateOnScroll>
       </div>
