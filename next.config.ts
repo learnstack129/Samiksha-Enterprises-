@@ -11,38 +11,13 @@ const nextConfig: NextConfig = {
   },
   images: {
     remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'placehold.co',
-        port: '',
-        pathname: '/**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'images.unsplash.com',
-        port: '',
-        pathname: '/**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'picsum.photos',
-        port: '',
-        pathname: '/**',
-      },
-      // Allow Clearbit for automatic logo fetching
-      {
-        protocol: 'https',
-        hostname: 'logo.clearbit.com',
-        port: '',
-        pathname: '/**',
-      },
-      // Allow Wikimedia for specific official logos
-      {
-        protocol: 'https',
-        hostname: 'upload.wikimedia.org',
-        port: '',
-        pathname: '/**',
-      },
+      { protocol: 'https', hostname: 'placehold.co' },
+      { protocol: 'https', hostname: 'images.unsplash.com' },
+      { protocol: 'https', hostname: 'picsum.photos' },
+      { protocol: 'https', hostname: 'logo.clearbit.com' }, // Keep as backup
+      { protocol: 'https', hostname: 'upload.wikimedia.org' },
+      // ADD GOOGLE HERE:
+      { protocol: 'https', hostname: 'www.google.com' },
     ],
   },
 };
