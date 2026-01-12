@@ -1,3 +1,4 @@
+// src/app/page.tsx
 import fs from 'fs';
 import path from 'path';
 import Header from '@/components/site/header';
@@ -5,6 +6,7 @@ import Hero from '@/components/sections/hero';
 import About from '@/components/sections/about';
 import Services from '@/components/sections/services';
 import Gallery from '@/components/sections/gallery';
+import Clients from '@/components/sections/clients'; // <--- IMPORT CLIENTS
 
 import Contact from '@/components/sections/contact';
 import Footer from '@/components/site/footer';
@@ -45,6 +47,10 @@ export default async function Home() {
         <Services />
         {/* Pass the found images to the Gallery component */}
         <Gallery folderImages={galleryImages} />
+        
+        {/* Add Clients Section Here */}
+        <Clients />
+        
         <Testimonials />
         <Contact />
       </main>
