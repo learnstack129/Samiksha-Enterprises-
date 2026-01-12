@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { AnimateOnScroll } from '../motion/AnimateOnScroll';
 
 const clients = [
-  // Honeywell Group
+  // Honeywell Group (Official Domain)
   { name: 'Honeywell Automation', domain: 'honeywell.com' },
   { name: 'Honeywell Universal Mfg', domain: 'honeywell.com' },
   { name: 'Honeywell International', domain: 'honeywell.com' },
@@ -19,35 +19,37 @@ const clients = [
   { name: 'MUPRO India', domain: 'muepro.com' },
   
   // Industrial & Technical
-  { name: 'Bombay Fluid Systems (Swagelok)', domain: 'swagelok.com' },
+  { name: 'Bombay Fluid Systems', domain: 'swagelok.com' }, // Swagelok is the parent brand
   { name: 'Baker Gauges India', domain: 'bakergauges.com' },
   { name: 'Eclipse Combustion', domain: 'honeywell.com' },
   { name: 'Amperehour Solar', domain: 'amperehourenergy.com' },
   { name: 'SBEM Pvt Ltd', domain: 'sbem.in' },
   
-  // Local Pune Brands
+  // Local Pune Brands (Manual overrides or fallbacks)
   { name: 'Chitale Bandhu Mithaiwale', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Chitale_Bandhu_Mithaiwale_logo.svg/512px-Chitale_Bandhu_Mithaiwale_logo.svg.png' },
   { name: 'Venus Traders', fallback: 'VT' },
   { name: 'Jay Engineering', fallback: 'JE' },
 ];
 
-// Sub-component to handle individual logo errors safely
 const ClientLogo = ({ client }: { client: typeof clients[0] }) => {
   const [hasError, setHasError] = useState(false);
 
-  // Construct Logo URL
+  // STRATEGY: Use Google's high-reliability icon service for domains. 
+  // It covers 99% of sites, unlike Clearbit which often 404s on smaller sites.
   const logoUrl = client.logo 
     ? client.logo 
     : client.domain 
-      ? `https://logo.clearbit.com/${client.domain}?size=200` 
-      : `https://placehold.co/200x80/f3f4f6/1f2937?text=${client.fallback || client.name}`;
+      ? `https://www.google.com/s2/favicons?domain=${client.domain}&sz=128`
+      : null;
 
-  if (hasError) {
-    // Fallback text if logo fails
+  // If no URL exists or image failed to load, show text fallback
+  if (hasError || !logoUrl) {
     return (
-      <span className="text-xs font-bold text-muted-foreground text-center px-2">
-        {client.name}
-      </span>
+      <div className="flex items-center justify-center w-full h-full bg-muted/10 rounded-md">
+        <span className="text-xs font-bold text-muted-foreground text-center px-2">
+          {client.fallback || client.name}
+        </span>
+      </div>
     );
   }
 
@@ -55,9 +57,12 @@ const ClientLogo = ({ client }: { client: typeof clients[0] }) => {
     <Image
       src={logoUrl}
       alt={`${client.name} Logo`}
-      width={160}
-      height={60}
-      className="object-contain max-h-full max-w-full"
+      width={128}
+      height={128}
+      className="object-contain max-h-[60px] max-w-[120px]"
+      // IMPORTANT: unoptimized bypasses Vercel's server processing, 
+      // allowing the browser to fetch the image directly from Google/Wikimedia.
+      unoptimized={true}
       onError={() => setHasError(true)}
     />
   );
@@ -82,7 +87,7 @@ export default function Clients() {
                 className="w-full h-32 flex flex-col items-center justify-center p-6 bg-white border border-border/50 rounded-xl shadow-sm hover:shadow-md hover:border-primary/20 transition-all duration-300 group"
                 title={client.name}
               >
-                <div className="relative w-full h-16 flex items-center justify-center grayscale group-hover:grayscale-0 transition-all duration-500 opacity-80 group-hover:opacity-100">
+                <div className="relative w-full h-full flex items-center justify-center grayscale group-hover:grayscale-0 transition-all duration-500 opacity-80 group-hover:opacity-100">
                   <ClientLogo client={client} />
                 </div>
               </div>
