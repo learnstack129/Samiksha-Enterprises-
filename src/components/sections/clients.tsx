@@ -1,4 +1,4 @@
-"use client"; // <--- THIS IS REQUIRED FOR onError TO WORK
+"use client";
 
 import { useState } from 'react';
 import Image from 'next/image';
