@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { Menu, X } from 'lucide-react';
@@ -20,6 +20,7 @@ const navLinks = [
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -28,6 +29,10 @@ export default function Header() {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  const handleAdminRedirect = () => {
+    router.push('/admin/login');
+  };
 
   return (
     <header
@@ -38,46 +43,66 @@ export default function Header() {
     >
       <div className="container mx-auto px-4">
         <div className="flex h-20 items-center justify-between">
-          <Logo />
-          <nav className="hidden lg:flex items-center gap-6">
+          {/* Secret Admin Access on Double Click */}
+          <div 
+            onDoubleClick={handleAdminRedirect}
+            className="cursor-default select-none transition-transform hover:scale-105 active:scale-95"
+            title="Double click for admin access"
+          >
+            <Logo />
+          </div>
+
+          {/* Desktop Navigation with improved styling */}
+          <nav className="hidden lg:flex items-center gap-8">
             {navLinks.map((link) => (
               <a
                 key={link.name}
                 href={link.href}
-                className="font-medium text-foreground/80 hover:text-primary transition-colors"
+                className="relative text-sm font-semibold uppercase tracking-wider text-foreground/80 transition-all hover:text-primary group"
               >
                 {link.name}
+                <span className="absolute -bottom-1 left-0 h-0.5 w-0 bg-primary transition-all duration-300 group-hover:w-full" />
               </a>
             ))}
+            <a href="#contact">
+              <Button size="sm" className="font-bold shadow-lg transition-all hover:translate-y-[-2px] active:translate-y-[0px]">
+                GET A QUOTE
+              </Button>
+            </a>
           </nav>
+
+          {/* Mobile Navigation */}
           <div className="lg:hidden">
             <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
               <SheetTrigger asChild>
-                <Button variant="ghost" size="icon">
-                  <Menu className="h-6 w-6" />
+                <Button variant="ghost" size="icon" className="hover:bg-primary/10">
+                  <Menu className="h-6 w-6 text-primary" />
                   <span className="sr-only">Open menu</span>
                 </Button>
               </SheetTrigger>
-              <SheetContent side="right" className="w-[300px] bg-card p-0">
+              <SheetContent side="right" className="w-[300px] bg-card p-0 border-l-primary/20">
                 <div className="flex h-full flex-col">
-                  <div className="flex items-center justify-between p-4 border-b">
+                  <div className="flex items-center justify-between p-6 border-b border-border/50">
                     <Logo />
                     <Button variant="ghost" size="icon" onClick={() => setMobileMenuOpen(false)}>
                       <X className="h-6 w-6" />
                       <span className="sr-only">Close menu</span>
                     </Button>
                   </div>
-                  <nav className="flex flex-col p-4 space-y-2">
+                  <nav className="flex flex-col p-6 space-y-4">
                     {navLinks.map((link) => (
                       <a
                         key={link.name}
                         href={link.href}
                         onClick={() => setMobileMenuOpen(false)}
-                        className="px-4 py-2 text-lg font-medium rounded-md hover:bg-muted"
+                        className="text-lg font-semibold border-b border-transparent hover:border-primary hover:text-primary transition-all py-2"
                       >
                         {link.name}
                       </a>
                     ))}
+                    <a href="#contact" onClick={() => setMobileMenuOpen(false)} className="pt-4">
+                      <Button className="w-full font-bold">CONTACT US</Button>
+                    </a>
                   </nav>
                 </div>
               </SheetContent>
