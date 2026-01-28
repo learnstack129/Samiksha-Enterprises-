@@ -2,7 +2,9 @@
 
 import * as React from 'react';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { db } from '@/lib/firebase';
+import { collection, query, orderBy, getDocs } from 'firebase/firestore';
 import Autoplay from 'embla-carousel-autoplay';
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
@@ -15,47 +17,50 @@ import {
   CarouselPrevious,
 } from '@/components/ui/carousel';
 import { Card, CardContent } from '@/components/ui/card';
+import { Loader2 } from 'lucide-react';
 
-// Define the shape of our image object
 interface GalleryImage {
   id: string;
   imageUrl: string;
-  description: string;
+  name: string;
 }
 
-interface GalleryProps {
-  folderImages?: string[]; // Accept a list of file paths from the page
-}
-
-export default function Gallery({ folderImages = [] }: GalleryProps) {
-  // Convert the file paths (strings) into the object format our gallery needs
-  const imagesToDisplay: GalleryImage[] = folderImages.length > 0
-    ? folderImages.map((path, index) => {
-        // Extract filename from path (e.g., "/images/work/Modern Kitchen.jpg" -> "Modern Kitchen")
-        const fileName = path.split('/').pop()?.split('.')[0] || `Project ${index + 1}`;
-        // Decode URI components to handle spaces (e.g., "Modern%20Kitchen" -> "Modern Kitchen")
-        const cleanName = decodeURIComponent(fileName);
-
-        return {
-          id: `local-image-${index}`,
-          imageUrl: path,
-          description: cleanName // Use the filename as the description
-        };
-      })
-    : [];
-
+export default function Gallery() {
+  const [images, setImages] = useState<GalleryImage[]>([]);
+  const [loading, setLoading] = useState(true);
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState<GalleryImage | null>(null);
-
-  const openLightbox = (image: GalleryImage) => {
-    setSelectedImage(image);
-    setLightboxOpen(true);
-  };
 
   // Initialize Autoplay plugin
   const plugin = React.useRef(
     Autoplay({ delay: 4000, stopOnInteraction: true })
   );
+
+  // Fetch images from Firestore
+  useEffect(() => {
+    const fetchImages = async () => {
+      try {
+        const q = query(collection(db, 'portfolio'), orderBy('createdAt', 'desc'));
+        const querySnapshot = await getDocs(q);
+        const fetchedImages = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        })) as GalleryImage[];
+        setImages(fetchedImages);
+      } catch (error) {
+        console.error("Error fetching gallery images:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchImages();
+  }, []);
+
+  const openLightbox = (image: GalleryImage) => {
+    setSelectedImage(image);
+    setLightboxOpen(true);
+  };
 
   return (
     <>
@@ -68,10 +73,14 @@ export default function Gallery({ folderImages = [] }: GalleryProps) {
             </p>
           </AnimateOnScroll>
           
-          {/* Carousel Section */}
           <AnimateOnScroll animation="slide-in-up">
             <div className="relative max-w-6xl mx-auto">
-                {imagesToDisplay.length > 0 ? (
+                {loading ? (
+                  <div className="flex flex-col items-center justify-center p-20 text-muted-foreground">
+                    <Loader2 className="h-8 w-8 animate-spin mb-2" />
+                    <p>Loading projects...</p>
+                  </div>
+                ) : images.length > 0 ? (
                   <Carousel
                     plugins={[plugin.current]}
                     className="w-full"
@@ -83,7 +92,7 @@ export default function Gallery({ folderImages = [] }: GalleryProps) {
                     }}
                   >
                     <CarouselContent className="-ml-4">
-                      {imagesToDisplay.map((image) => (
+                      {images.map((image) => (
                         <CarouselItem key={image.id} className="pl-4 md:basis-1/2 lg:basis-1/3 xl:basis-1/4">
                           <div className="p-1 h-full">
                             <Card 
@@ -93,25 +102,21 @@ export default function Gallery({ folderImages = [] }: GalleryProps) {
                               <CardContent className="p-0 relative aspect-[4/3]">
                                 <Image
                                   src={image.imageUrl}
-                                  alt={image.description}
+                                  alt={image.name}
                                   fill
                                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                                   className="object-cover transition-transform duration-500 group-hover:scale-110"
                                 />
-                                {/* Overlay on Hover */}
                                 <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                                   <p className="text-white font-medium tracking-wide">View Project</p>
                                 </div>
                               </CardContent>
                               
-                              {/* --- NEW SECTION: Display Image Name --- */}
                               <div className="p-3 text-center bg-card border-t">
-                                <p className="font-semibold text-sm truncate" title={image.description}>
-                                  {image.description}
+                                <p className="font-semibold text-sm truncate" title={image.name}>
+                                  {image.name}
                                 </p>
                               </div>
-                              {/* --------------------------------------- */}
-
                             </Card>
                           </div>
                         </CarouselItem>
@@ -121,8 +126,8 @@ export default function Gallery({ folderImages = [] }: GalleryProps) {
                     <CarouselNext className="hidden md:flex -right-12 h-12 w-12" />
                   </Carousel>
                 ) : (
-                  <div className="text-center p-10 text-gray-500 bg-muted/20 rounded-lg">
-                     No images found in /public/images/gallery/
+                  <div className="text-center p-20 text-gray-500 bg-muted/20 rounded-lg">
+                     No projects found in the database.
                   </div>
                 )}
             </div>
@@ -147,18 +152,16 @@ export default function Gallery({ folderImages = [] }: GalleryProps) {
 
           {selectedImage && (
             <div className="relative w-full h-[80vh] flex flex-col items-center justify-center pointer-events-none">
-                {/* Image Wrapper to allow interaction */}
                 <div className="relative w-full h-full pointer-events-auto">
                     <Image
                     src={selectedImage.imageUrl}
-                    alt={selectedImage.description}
+                    alt={selectedImage.name}
                     fill
                     className="object-contain"
                     />
                 </div>
-                {/* Optional: Show name in lightbox too */}
                 <div className="mt-4 bg-black/50 px-4 py-2 rounded text-white pointer-events-auto">
-                    {selectedImage.description}
+                    {selectedImage.name}
                 </div>
             </div>
           )}
