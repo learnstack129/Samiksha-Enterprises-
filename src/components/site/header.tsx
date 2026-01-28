@@ -64,11 +64,7 @@ export default function Header() {
                 <span className="absolute -bottom-1 left-0 h-0.5 w-0 bg-primary transition-all duration-300 group-hover:w-full" />
               </a>
             ))}
-            <a href="#contact">
-              <Button size="sm" className="font-bold shadow-lg transition-all hover:translate-y-[-2px] active:translate-y-[0px]">
-                GET A QUOTE
-              </Button>
-            </a>
+            
           </nav>
 
           {/* Mobile Navigation */}
