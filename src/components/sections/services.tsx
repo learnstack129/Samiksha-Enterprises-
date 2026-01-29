@@ -1,6 +1,8 @@
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { serviceData } from '@/lib/services';
 import { AnimateOnScroll } from '../motion/AnimateOnScroll';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 
 export default function Services() {
   return (
@@ -29,6 +31,14 @@ export default function Services() {
                       </li>
                     ))}
                   </ul>
+                  {/* Conditional Button for Trading & Supply */}
+                  {category.category === 'Trading & Supply' && (
+                    <div className="mt-8">
+                      <Button asChild className="w-full">
+                        <Link href="/materials">View Material List</Link>
+                      </Button>
+                    </div>
+                  )}
                 </CardContent>
               </Card>
             </AnimateOnScroll>
