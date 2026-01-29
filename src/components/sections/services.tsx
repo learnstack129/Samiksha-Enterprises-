@@ -1,8 +1,8 @@
 'use client';
 
 import { AnimateOnScroll } from '../motion/AnimateOnScroll';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { services } from '@/lib/services';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { serviceData } from '@/lib/services'; // Corrected import name
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 
@@ -19,36 +19,34 @@ export default function Services() {
         </AnimateOnScroll>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {services.map((service, index) => (
+          {serviceData.map((category, index) => (
             <AnimateOnScroll
-              key={service.title}
+              key={category.category}
               animation="slide-in-up"
               delay={`${index * 100}ms`}
             >
               <Card className="h-full border-none shadow-md hover:shadow-xl transition-shadow duration-300 group bg-card flex flex-col">
                 <CardHeader>
                   <div className="mb-4 w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors duration-300">
-                    <service.icon size={24} />
+                    <category.icon size={24} />
                   </div>
-                  <CardTitle className="text-xl mb-2">{service.title}</CardTitle>
-                  <CardDescription className="text-muted-foreground">
-                    {service.description}
-                  </CardDescription>
+                  {/* Changed .title to .category to match your lib file */}
+                  <CardTitle className="text-xl mb-2">{category.category}</CardTitle>
                 </CardHeader>
                 <CardContent className="flex flex-col flex-grow justify-between">
                   <ul className="space-y-2">
-                    {service.features.map((feature) => (
-                      <li key={feature} className="flex items-center gap-2 text-sm text-muted-foreground">
+                    {category.services.map((service) => (
+                      <li key={service.title} className="flex items-center gap-2 text-sm text-muted-foreground">
                         <div className="w-1.5 h-1.5 rounded-full bg-accent" />
-                        {feature}
+                        {service.title}
                       </li>
                     ))}
                   </ul>
                   
-                  {/* Redirect button specifically for Trading & Supply */}
-                  {service.title === "Trading & Supply" && (
+                  {/* Redirect button specifically for Trading & Supply category */}
+                  {category.category === "Trading & Supply" && (
                     <div className="mt-6 pt-4 border-t border-border">
-                      <Link href="/materials" prefetch={false}>
+                      <Link href="/materials">
                         <Button variant="outline" className="w-full hover:bg-primary hover:text-white transition-all">
                           View Material List
                         </Button>
