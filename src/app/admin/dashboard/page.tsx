@@ -12,7 +12,7 @@ import { Trash2, Upload, Loader2 } from "lucide-react";
 export default function AdminDashboard() {
   const [file, setFile] = useState<File | null>(null);
   const [name, setName] = useState("");
-  const [type, setType] = useState<"portfolio" | "clients">("portfolio");
+  const [type, setType] = useState<"portfolio" | "clients" | "materials">("portfolio");
   const [items, setItems] = useState<any[]>([]);
   const [uploadProgress, setUploadProgress] = useState<number>(0);
   const [isUploading, setIsUploading] = useState(false);
@@ -59,7 +59,7 @@ export default function AdminDashboard() {
         setUploadProgress(0);
         setFile(null);
         setName("");
-        toast({ title: "Success", description: `${type === 'portfolio' ? 'Project' : 'Client'} added successfully!` });
+        toast({ title: "Success", description: `${type.charAt(0).toUpperCase() + type.slice(1)} added successfully!` });
         fetchData();
       }
     );
@@ -81,7 +81,7 @@ export default function AdminDashboard() {
     <div className="p-8 max-w-4xl mx-auto min-h-screen bg-background">
       <h1 className="text-3xl font-bold mb-8 text-primary">Content Management</h1>
       
-      <div className="flex gap-4 mb-8">
+      <div className="flex flex-wrap gap-4 mb-8">
         <Button 
           variant={type === "portfolio" ? "default" : "outline"} 
           onClick={() => setType("portfolio")}
@@ -96,14 +96,23 @@ export default function AdminDashboard() {
         >
           Valued Customers
         </Button>
+        <Button 
+          variant={type === "materials" ? "default" : "outline"} 
+          onClick={() => setType("materials")}
+          className="flex-1"
+        >
+          Material List
+        </Button>
       </div>
 
       <div className="bg-card border p-6 rounded-xl mb-12 shadow-sm space-y-6">
-        <h2 className="text-lg font-semibold">Upload New {type === "portfolio" ? "Project" : "Logo"}</h2>
+        <h2 className="text-lg font-semibold">
+          Upload New {type === "portfolio" ? "Project" : type === "clients" ? "Logo" : "Material"}
+        </h2>
         <div className="space-y-4">
           <Input 
             type="text" 
-            placeholder={type === "portfolio" ? "Project Name" : "Company Name"} 
+            placeholder={type === "portfolio" ? "Project Name" : type === "clients" ? "Company Name" : "Material Name"} 
             value={name} 
             onChange={e => setName(e.target.value)} 
             disabled={isUploading}
