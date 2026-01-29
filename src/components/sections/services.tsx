@@ -25,7 +25,7 @@ export default function Services() {
               animation="slide-in-up"
               delay={`${index * 100}ms`}
             >
-              <Card className="h-full border-none shadow-md hover:shadow-xl transition-shadow duration-300 group bg-card">
+              <Card className="h-full border-none shadow-md hover:shadow-xl transition-shadow duration-300 group bg-card flex flex-col">
                 <CardHeader>
                   <div className="mb-4 w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors duration-300">
                     <service.icon size={24} />
@@ -35,7 +35,7 @@ export default function Services() {
                     {service.description}
                   </CardDescription>
                 </CardHeader>
-                <CardContent className="flex flex-col h-full justify-between">
+                <CardContent className="flex flex-col flex-grow justify-between">
                   <ul className="space-y-2">
                     {service.features.map((feature) => (
                       <li key={feature} className="flex items-center gap-2 text-sm text-muted-foreground">
@@ -45,10 +45,10 @@ export default function Services() {
                     ))}
                   </ul>
                   
-                  {/* Added button specifically for Trading & Supply */}
+                  {/* Redirect button specifically for Trading & Supply */}
                   {service.title === "Trading & Supply" && (
                     <div className="mt-6 pt-4 border-t border-border">
-                      <Link href="/materials">
+                      <Link href="/materials" prefetch={false}>
                         <Button variant="outline" className="w-full hover:bg-primary hover:text-white transition-all">
                           View Material List
                         </Button>
