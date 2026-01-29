@@ -65,7 +65,7 @@ export default function Clients() {
                 animation="fade-in"
                 className="w-full group"
               >
-                <div className="relative h-24 w-full bg-card rounded-xl border border-border/50 shadow-sm p-4 flex items-center justify-center grayscale hover:grayscale-0 transition-all duration-500 hover:shadow-md hover:border-primary/20">
+                <div className="relative h-24 w-full bg-card rounded-xl border border-border/50 shadow-sm p-4 flex items-center justify-center transition-all duration-500 hover:shadow-md hover:border-primary/20">
                   <div className="relative h-full w-full">
                     <Image
                       src={client.imageUrl}
@@ -92,3 +92,4 @@ export default function Clients() {
     </section>
   );
 }
+
