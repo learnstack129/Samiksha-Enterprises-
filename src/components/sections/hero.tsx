@@ -8,7 +8,7 @@ export default function Hero() {
     <section id="home" className="relative h-[70vh] min-h-[500px] lg:h-screen flex items-center justify-center text-white">
       {/* Updated to use the specific hero.png image */}
       <Image
-        src="/images/gallery/hero.png" 
+        src="/gallery/images/hero.png" 
         alt="Samiksha Enterprises Industrial Services"
         fill
         className="object-cover"
