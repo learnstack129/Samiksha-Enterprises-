@@ -16,7 +16,7 @@ export default function About() {
           <AnimateOnScroll animation="slide-in-left" className="w-full max-w-md mx-auto">
             <div className="relative aspect-square w-full">
               <Image
-                src="/images/gallery/team.jpg" // <--- FIXED PATH
+                src="/gallery/images/tilted-logo.png" // <--- FIXED PATH
                 alt="Mr. Satish Jagadale and Team - Samiksha Enterprises"
                 fill
                 className="rounded-lg shadow-2xl object-cover"
