@@ -18,17 +18,27 @@ export default function Clients() {
   const [clients, setClients] = useState<ClientLogo[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
+useEffect(() => {
     const fetchClients = async () => {
       try {
-        // Query the 'clients' collection created by your Admin Dashboard
-        const q = query(collection(db, 'clients'), orderBy('createdAt', 'desc'));
+        const q = query(collection(db, 'clients'));
         const querySnapshot = await getDocs(q);
+        
         const fetchedClients = querySnapshot.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
         })) as ClientLogo[];
-        setClients(fetchedClients);
+
+        // Sort by index (ascending), falling back to createdAt (descending) for old items
+        const sortedClients = fetchedClients.sort((a, b) => {
+          if (a.index !== undefined && b.index !== undefined) {
+            return a.index - b.index;
+          }
+          // If no index, push to the end or sort by creation date
+          return 0; 
+        });
+
+        setClients(sortedClients);
       } catch (error) {
         console.error("Error fetching client logos:", error);
       } finally {
@@ -38,7 +48,6 @@ export default function Clients() {
 
     fetchClients();
   }, []);
-
   return (
     <section id="clients" className="py-20 bg-muted/30">
       <div className="container mx-auto px-4">
@@ -92,4 +101,5 @@ export default function Clients() {
     </section>
   );
 }
+
 
