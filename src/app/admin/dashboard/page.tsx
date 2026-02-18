@@ -12,7 +12,7 @@ import { Trash2, Upload, Loader2, Hash } from "lucide-react";
 export default function AdminDashboard() {
   const [file, setFile] = useState<File | null>(null);
   const [name, setName] = useState("");
-  const [displayOrder, setDisplayOrder] = useState<string>("0"); // New state for index
+  const [index, setIndex] = useState<string>("0"); // State for display preference
   const [type, setType] = useState<"portfolio" | "clients" | "materials">("portfolio");
   const [items, setItems] = useState<any[]>([]);
   const [uploadProgress, setUploadProgress] = useState<number>(0);
@@ -20,7 +20,7 @@ export default function AdminDashboard() {
   const { toast } = useToast();
 
   const fetchData = async () => {
-    // Modified to fetch items ordered by the new index field
+    // Orders items by the new 'index' field so you see the preference order in the list
     const q = query(collection(db, type), orderBy("index", "asc"));
     const querySnapshot = await getDocs(q);
     setItems(querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
@@ -51,12 +51,12 @@ export default function AdminDashboard() {
       async () => {
         const url = await getDownloadURL(uploadTask.snapshot.ref);
         
-        // Added 'index' field to the Firestore document
+        // Added the 'index' field to the document storage
         await addDoc(collection(db, type), { 
           name, 
           imageUrl: url, 
           storagePath: storageRef.fullPath,
-          index: Number(displayOrder), // Save preference as a number
+          index: Number(index), // Saves the preference as a number for correct sorting
           createdAt: new Date() 
         });
         
@@ -64,7 +64,7 @@ export default function AdminDashboard() {
         setUploadProgress(0);
         setFile(null);
         setName("");
-        setDisplayOrder("0"); // Reset index field
+        setIndex("0");
         toast({ title: "Success", description: `${type.charAt(0).toUpperCase() + type.slice(1)} added successfully!` });
         fetchData();
       }
@@ -116,43 +116,39 @@ export default function AdminDashboard() {
           Upload New {type === "portfolio" ? "Project" : type === "clients" ? "Logo" : "Material"}
         </h2>
         <div className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <Input 
+            type="text" 
+            placeholder={type === "portfolio" ? "Project Name" : type === "clients" ? "Company Name" : "Material Name"} 
+            value={name} 
+            onChange={e => setName(e.target.value)} 
+            disabled={isUploading}
+          />
+
+          {/* New Preference Index Field - Only visible when "Valued Customers" is selected */}
+          {type === "clients" && (
             <div className="space-y-2">
-              <label className="text-sm font-medium">Name</label>
-              <Input 
-                type="text" 
-                placeholder={type === "portfolio" ? "Project Name" : type === "clients" ? "Company Name" : "Material Name"} 
-                value={name} 
-                onChange={e => setName(e.target.value)} 
-                disabled={isUploading}
-              />
-            </div>
-            <div className="space-y-2">
-              <label className="text-sm font-medium">Display Preference (Order Index)</label>
+              <label className="text-sm font-medium text-muted-foreground">Display Preference (e.g., 1 for first)</label>
               <div className="relative">
                 <Hash className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input 
                   type="number" 
-                  placeholder="e.g. 1" 
+                  placeholder="Order Index" 
                   className="pl-9"
-                  value={displayOrder} 
-                  onChange={e => setDisplayOrder(e.target.value)} 
+                  value={index} 
+                  onChange={e => setIndex(e.target.value)} 
                   disabled={isUploading}
                 />
               </div>
             </div>
-          </div>
+          )}
 
-          <div className="space-y-2">
-            <label className="text-sm font-medium">Image File</label>
-            <Input 
-              type="file" 
-              accept="image/*"
-              onChange={e => setFile(e.target.files?.[0] || null)} 
-              disabled={isUploading}
-              className="cursor-pointer"
-            />
-          </div>
+          <Input 
+            type="file" 
+            accept="image/*"
+            onChange={e => setFile(e.target.files?.[0] || null)} 
+            disabled={isUploading}
+            className="cursor-pointer"
+          />
           
           {isUploading && (
             <div className="space-y-2">
@@ -175,12 +171,13 @@ export default function AdminDashboard() {
         </div>
       </div>
 
-      <h2 className="text-xl font-bold mb-6">Existing Items (Sorted by Preference)</h2>
+      <h2 className="text-xl font-bold mb-6">Existing Items</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {items.length > 0 ? (
           items.map(item => (
             <div key={item.id} className="flex items-center justify-between p-4 border rounded-lg bg-card shadow-sm hover:shadow-md transition-shadow">
               <div className="flex items-center gap-4 overflow-hidden">
+                {/* Shows the index badge in the list */}
                 <div className="bg-primary/10 text-primary text-xs font-bold px-2 py-1 rounded">
                   #{item.index || 0}
                 </div>
