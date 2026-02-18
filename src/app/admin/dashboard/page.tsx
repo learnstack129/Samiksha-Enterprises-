@@ -19,11 +19,30 @@ export default function AdminDashboard() {
   const [isUploading, setIsUploading] = useState(false);
   const { toast } = useToast();
 
-  const fetchData = async () => {
-    // Orders items by the new 'index' field so you see the preference order in the list
-    const q = query(collection(db, type), orderBy("index", "asc"));
-    const querySnapshot = await getDocs(q);
-    setItems(querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+const fetchData = async () => {
+    try {
+      // Step 1: Query all documents in the selected collection
+      const q = query(collection(db, type));
+      const querySnapshot = await getDocs(q);
+      
+      const fetchedItems = querySnapshot.docs.map(doc => ({ 
+        id: doc.id, 
+        ...doc.data() 
+      }));
+
+      // Step 2: Manually sort them in the application code
+      // This ensures items without an 'index' field still show up
+      const sortedItems = fetchedItems.sort((a, b) => {
+        const indexA = a.index !== undefined ? Number(a.index) : Number.MAX_SAFE_INTEGER;
+        const indexB = b.index !== undefined ? Number(b.index) : Number.MAX_SAFE_INTEGER;
+        return indexA - indexB;
+      });
+
+      setItems(sortedItems);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      toast({ title: "Fetch Error", description: "Could not load existing items.", variant: "destructive" });
+    }
   };
 
   useEffect(() => { fetchData(); }, [type]);
