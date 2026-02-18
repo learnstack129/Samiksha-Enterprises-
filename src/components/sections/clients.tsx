@@ -4,7 +4,7 @@ import * as React from 'react';
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import { db } from '@/lib/firebase';
-import { collection, query, orderBy, getDocs } from 'firebase/firestore';
+import { collection, query, getDocs } from 'firebase/firestore';
 import { AnimateOnScroll } from '../motion/AnimateOnScroll';
 import { Loader2 } from 'lucide-react';
 
@@ -12,13 +12,14 @@ interface ClientLogo {
   id: string;
   imageUrl: string;
   name: string;
+  index?: number; // Added index to the interface
 }
 
 export default function Clients() {
   const [clients, setClients] = useState<ClientLogo[]>([]);
   const [loading, setLoading] = useState(true);
 
-useEffect(() => {
+  useEffect(() => {
     const fetchClients = async () => {
       try {
         const q = query(collection(db, 'clients'));
@@ -29,13 +30,12 @@ useEffect(() => {
           ...doc.data(),
         })) as ClientLogo[];
 
-        // Sort by index (ascending), falling back to createdAt (descending) for old items
+        // Updated Sorting Logic: strictly sorts by index number
         const sortedClients = fetchedClients.sort((a, b) => {
-          if (a.index !== undefined && b.index !== undefined) {
-            return a.index - b.index;
-          }
-          // If no index, push to the end or sort by creation date
-          return 0; 
+          const indexA = a.index !== undefined ? Number(a.index) : Number.MAX_SAFE_INTEGER;
+          const indexB = b.index !== undefined ? Number(b.index) : Number.MAX_SAFE_INTEGER;
+          
+          return indexA - indexB;
         });
 
         setClients(sortedClients);
@@ -48,6 +48,7 @@ useEffect(() => {
 
     fetchClients();
   }, []);
+
   return (
     <section id="clients" className="py-20 bg-muted/30">
       <div className="container mx-auto px-4">
@@ -101,5 +102,3 @@ useEffect(() => {
     </section>
   );
 }
-
-
