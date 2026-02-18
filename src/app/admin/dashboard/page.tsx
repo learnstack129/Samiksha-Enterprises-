@@ -1,27 +1,39 @@
 "use client";
 import { useState, useEffect } from "react";
 import { db, storage } from "@/lib/firebase";
-import { collection, addDoc, getDocs, deleteDoc, doc, query, orderBy } from "firebase/firestore";
+import { 
+  collection, 
+  addDoc, 
+  getDocs, 
+  deleteDoc, 
+  doc, 
+  query, 
+  updateDoc 
+} from "firebase/firestore";
 import { ref, uploadBytesResumable, getDownloadURL, deleteObject } from "firebase/storage";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/hooks/use-toast";
-import { Trash2, Upload, Loader2, Hash } from "lucide-react";
+import { Trash2, Upload, Loader2, Hash, Edit2, Check, X } from "lucide-react";
 
 export default function AdminDashboard() {
   const [file, setFile] = useState<File | null>(null);
   const [name, setName] = useState("");
-  const [index, setIndex] = useState<string>("0"); // State for display preference
+  const [index, setIndex] = useState<string>("0");
   const [type, setType] = useState<"portfolio" | "clients" | "materials">("portfolio");
   const [items, setItems] = useState<any[]>([]);
   const [uploadProgress, setUploadProgress] = useState<number>(0);
   const [isUploading, setIsUploading] = useState(false);
+  
+  // New states for editing existing preferences
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editIndex, setEditIndex] = useState<string>("0");
+  
   const { toast } = useToast();
 
-const fetchData = async () => {
+  const fetchData = async () => {
     try {
-      // Step 1: Query all documents in the selected collection
       const q = query(collection(db, type));
       const querySnapshot = await getDocs(q);
       
@@ -30,8 +42,6 @@ const fetchData = async () => {
         ...doc.data() 
       }));
 
-      // Step 2: Manually sort them in the application code
-      // This ensures items without an 'index' field still show up
       const sortedItems = fetchedItems.sort((a, b) => {
         const indexA = a.index !== undefined ? Number(a.index) : Number.MAX_SAFE_INTEGER;
         const indexB = b.index !== undefined ? Number(b.index) : Number.MAX_SAFE_INTEGER;
@@ -70,12 +80,11 @@ const fetchData = async () => {
       async () => {
         const url = await getDownloadURL(uploadTask.snapshot.ref);
         
-        // Added the 'index' field to the document storage
         await addDoc(collection(db, type), { 
           name, 
           imageUrl: url, 
           storagePath: storageRef.fullPath,
-          index: Number(index), // Saves the preference as a number for correct sorting
+          index: Number(index),
           createdAt: new Date() 
         });
         
@@ -88,6 +97,20 @@ const fetchData = async () => {
         fetchData();
       }
     );
+  };
+
+  const handleUpdateIndex = async (id: string) => {
+    try {
+      const docRef = doc(db, type, id);
+      await updateDoc(docRef, {
+        index: Number(editIndex)
+      });
+      setEditingId(null);
+      toast({ title: "Updated", description: "Display preference updated successfully." });
+      fetchData();
+    } catch (error: any) {
+      toast({ title: "Update Failed", description: error.message, variant: "destructive" });
+    }
   };
 
   const handleDelete = async (id: string, path: string) => {
@@ -143,7 +166,6 @@ const fetchData = async () => {
             disabled={isUploading}
           />
 
-          {/* New Preference Index Field - Only visible when "Valued Customers" is selected */}
           {type === "clients" && (
             <div className="space-y-2">
               <label className="text-sm font-medium text-muted-foreground">Display Preference (e.g., 1 for first)</label>
@@ -195,11 +217,37 @@ const fetchData = async () => {
         {items.length > 0 ? (
           items.map(item => (
             <div key={item.id} className="flex items-center justify-between p-4 border rounded-lg bg-card shadow-sm hover:shadow-md transition-shadow">
-              <div className="flex items-center gap-4 overflow-hidden">
-                {/* Shows the index badge in the list */}
-                <div className="bg-primary/10 text-primary text-xs font-bold px-2 py-1 rounded">
-                  #{item.index || 0}
-                </div>
+              <div className="flex items-center gap-4 overflow-hidden flex-1">
+                {/* Editable Index Badge */}
+                {editingId === item.id ? (
+                  <div className="flex items-center gap-2">
+                    <Input 
+                      type="number" 
+                      className="w-16 h-8 text-xs" 
+                      value={editIndex} 
+                      onChange={(e) => setEditIndex(e.target.value)}
+                    />
+                    <Button size="icon" variant="ghost" className="h-8 w-8 text-green-600" onClick={() => handleUpdateIndex(item.id)}>
+                      <Check className="h-4 w-4" />
+                    </Button>
+                    <Button size="icon" variant="ghost" className="h-8 w-8 text-muted-foreground" onClick={() => setEditingId(null)}>
+                      <X className="h-4 w-4" />
+                    </Button>
+                  </div>
+                ) : (
+                  <div 
+                    className="bg-primary/10 text-primary text-xs font-bold px-2 py-1 rounded cursor-pointer hover:bg-primary/20 flex items-center gap-1"
+                    title="Click to edit preference"
+                    onClick={() => {
+                      setEditingId(item.id);
+                      setEditIndex(item.index?.toString() || "0");
+                    }}
+                  >
+                    #{item.index || 0}
+                    <Edit2 className="h-3 w-3 opacity-50" />
+                  </div>
+                )}
+
                 <div className="relative h-12 w-12 flex-shrink-0">
                   <img src={item.imageUrl} alt={item.name} className="h-full w-full object-cover rounded-md" />
                 </div>
