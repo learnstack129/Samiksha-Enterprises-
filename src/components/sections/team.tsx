@@ -12,14 +12,14 @@ const team = [
     bio: "Driving the vision of Samiksha Enterprises with over 15 years of industry expertise."
   },
   {
-    name: "Team Member 1",
+    name: "Ajay Sawant",
     role: "Project Manager",
     image: "/gallery/team/IMG_6765.JPG.jpeg", // Placeholder
     bio: "Ensures timely delivery and strict quality control across all industrial sites."
   },
   {
-    name: "Team Member 2",
-    role: "Technical Lead",
+    name: "Ajay Jadhav",
+    role: "Supervisor",
     image: "/gallery/team/IMG_6781.JPG.jpeg", // Placeholder
     bio: "Specialist in structural fabrication and complex civil engineering solutions."
   }
