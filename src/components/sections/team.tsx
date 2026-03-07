@@ -8,19 +8,19 @@ const team = [
   {
     name: "Mr. Satish Jagadale",
     role: "Founder & Proprietor",
-    image: "/gallery/images/tilted-logo.png", // Recommended: Use a professional portrait here
+    image: "/gallery/team/WhatsApp Image 2026-03-07 at 3.58.55 PM.jpeg", // Recommended: Use a professional portrait here
     bio: "Driving the vision of Samiksha Enterprises with over 15 years of industry expertise."
   },
   {
     name: "Team Member 1",
     role: "Project Manager",
-    image: "/gallery/images/abc", // Placeholder
+    image: "/gallery/team/IMG_6765.JPG.jpeg", // Placeholder
     bio: "Ensures timely delivery and strict quality control across all industrial sites."
   },
   {
     name: "Team Member 2",
     role: "Technical Lead",
-    image: "/gallery/images/abc", // Placeholder
+    image: "/gallery/team/IMG_6781.JPG.jpeg", // Placeholder
     bio: "Specialist in structural fabrication and complex civil engineering solutions."
   }
 ];
